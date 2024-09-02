@@ -53,8 +53,8 @@
           <li><a href="about.html">About</a></li>
           <li><a href="services.html">Services</a></li>
           <!-- <li><a href="portfolio.html">Portfolio</a></li> -->
-          <li><a href="team.html">Team</a></li>
-          <li><a href="blog.html">Blog</a></li>
+          <!-- <li><a href="team.html">Team</a></li> -->
+          <li><a href="http://www.bharaththippireddy.com/" class="active" target="_blank">Blog</a></li>
           <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="#">Dropdown 1</a></li>
@@ -107,7 +107,7 @@
               <i class="bi bi-geo-alt flex-shrink-0"></i>
               <div>
                 <h3>Address</h3>
-                <p>Sree Ameya, Yosufguda, Hyderabad, Hyd 500038</p>
+                <p>Sree Ameya Residency, Yosufguda, Hyderabad-500038</p>
               </div>
             </div><!-- End Info Item -->
 
@@ -115,7 +115,7 @@
               <i class="bi bi-telephone flex-shrink-0"></i>
               <div>
                 <h3>Call Us</h3>
-                <p>+91 7995498295</p>
+                <p>+91 9000608252</p>
               </div>
             </div><!-- End Info Item -->
 
@@ -123,53 +123,66 @@
               <i class="bi bi-envelope flex-shrink-0"></i>
               <div>
                 <h3>Email Us</h3>
-                <p>support@neyah.net</p>
+                <p>sekhar.payyavula@neyah.net</p>
               </div>
             </div><!-- End Info Item -->
 
           </div>
 
+
           <div class="col-lg-7">
-            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="500">
-              <div class="row gy-4">
-
-                <div class="col-md-6">
-                  <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
+            <form id="contactForm" class="php-email-form" data-aos="fade-up" data-aos-delay="500" onsubmit="submitForm(event)">
+                <div class="row gy-4">
+        
+                    <div class="col-md-6">
+                        <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                    </div>
+        
+                    <div class="col-md-6">
+                        <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                    </div>
+        
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" name="subject" placeholder="Subject" required>
+                    </div>
+        
+                    <div class="col-md-12">
+                        <textarea class="form-control" name="message" rows="6" placeholder="Message" required></textarea>
+                    </div>
+        
+                    <div class="col-md-12 text-center">
+                        <!-- Removed unused error messages -->
+                        <div class="sent-message" style="display:none; color: white;">Your message has been sent. Thank you!</div>
+        
+                        <button type="submit">Send Message</button>
+                    </div>
                 </div>
-
-                <div class="col-md-6 ">
-                  <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
-                </div>
-
-                <div class="col-md-12">
-                  <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
-                </div>
-
-                <div class="col-md-12">
-                  <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
-                </div>
-
-                <div class="col-md-12 text-center">
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">Your message has been sent. Thank you!</div>
-
-                  <button type="submit">Send Message</button>
-                </div>
-
-              </div>
             </form>
-          </div><!-- End Contact Form -->
-
         </div>
-
-      </div>
+        
+        <script>
+            function submitForm(event) {
+                event.preventDefault(); // Prevent the default form submission
+        
+                // Show the success message
+                const sentMessage = document.querySelector('.sent-message');
+                sentMessage.style.display = 'block';
+                sentMessage.textContent = "Your data has been added. We will get back to you later.";
+        
+                // Clear the form fields
+                document.getElementById('contactForm').reset();
+            }
+        </script>
+        
+        
+        
+      
 
     </section><!-- /Contact Section -->
 
   </main>
 
-  <footer id="footer" class="footer">
+  <!-- <footer id="footer" class="footer">
 
     <div class="footer-top">
       <div class="container">
@@ -214,10 +227,10 @@
           <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
             <h4>Contact Us</h4>
             <p>Neyah</p>
-            <p>Sree Ameya, Yosufguda,Hyderabad, Hyd 500038</p>
+            <p>Sree Ameya Residency, Yosufguda, Hyderabad-500038</p>
             <p>India</p>
-            <p class="mt-4"><strong>Phone:</strong> <span>+91 7995498295</span></p>
-            <p><strong>Email:</strong> <span>support@neyah.net</span></p>
+            <p class="mt-4"><strong>Phone:</strong> <span>+91 9000608252</span></p>
+            <p><strong>Email:</strong> <span>sekhar.payyavula@neyah.net</span></p>
           </div>
 
         </div>
@@ -227,7 +240,7 @@
     <div class="container copyright text-center">
       <p>© <span>Copyright</span> <strong class="px-1 sitename">Neyah</strong> <span>All Rights Reserved</span></p>
       <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
+        <!- All the links in the footer should remain intact. -->
         <!-- You can delete the links only if you've purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
@@ -235,7 +248,7 @@
       </div>
     </div>
 
-  </footer>
+  </footer> 
 
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
