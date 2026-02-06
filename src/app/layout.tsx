@@ -14,18 +14,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Code Scaffold - AI-Powered Development",
-  description: "Modern Next.js scaffold optimized for AI-powered development. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
+  title: "Learn Vibe Coding with Kali",
+  description: "Learn Vibe Coding with Kali - Master the art of creating high-impact MVPs using conversational AI, generative AI, computer vision, and natural language processing. By leveraging AI as your entire technical team, you gain the confidence to quickly iterate and monetize your ideas, giving you a massive competitive advantage.",
   keywords: ["Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui", "AI development", "React"],
   openGraph: {
-    title: "Code Scaffold",
-    description: "AI-powered development with modern React stack",
+    title: "Learn Vibe Coding with Kali",
+    description: "Learn Vibe Coding with Kali - Master the art of creating high-impact MVPs using conversational AI, generative AI, computer vision, and natural language processing. By leveraging AI as your entire technical team, you gain the confidence to quickly iterate and monetize your ideas, giving you a massive competitive advantage.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Code Scaffold",
-    description: "AI-powered development with modern React stack",
+    title: "Learn Vibe Coding with Kali",
+    description: "Learn Vibe Coding with Kali - Master the art of creating high-impact MVPs using conversational AI, generative AI, computer vision, and natural language processing. By leveraging AI as your entire technical team, you gain the confidence to quickly iterate and monetize your ideas, giving you a massive competitive advantage.",
   },
 };
 
