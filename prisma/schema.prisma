@@ -30,3 +30,13 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String?
+  interest  String?  // e.g., "Vibe Coding", "Book", "Podcast", "General"
+  createdAt DateTime @default(now())
+}

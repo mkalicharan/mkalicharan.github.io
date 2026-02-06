@@ -1,9 +1,28 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 
 export default function Home() {
   const observerRef = useRef<IntersectionObserver | null>(null)
+  const [showGetStartedForm, setShowGetStartedForm] = useState(false)
+  const [formState, setFormState] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    interest: '',
+    message: '',
+  })
+  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
 
   useEffect(() => {
     // Intersection Observer for animations
@@ -24,7 +43,7 @@ export default function Home() {
     // Observe all animated elements
     const elements = document.querySelectorAll('.animate-on-scroll')
     elements.forEach((el) => {
-      el.style.opacity = '0'
+      ;(el as HTMLElement).style.opacity = '0'
       observerRef.current?.observe(el)
     })
 
@@ -58,6 +77,24 @@ export default function Home() {
         behavior: 'smooth',
         block: 'start'
       })
+    }
+  }
+
+  const handleGetStartedSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setFormStatus('submitting')
+    try {
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formState),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to submit')
+      setFormStatus('success')
+      setFormState({ name: '', email: '', phone: '', interest: '', message: '' })
+    } catch {
+      setFormStatus('error')
     }
   }
 
@@ -440,44 +477,17 @@ export default function Home() {
         }
 
         .book-cover {
-          background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%);
           border-radius: 16px;
-          padding: 32px;
           box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
           aspect-ratio: 3/4;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          text-align: center;
-          color: white;
-          position: relative;
           overflow: hidden;
-        }
-
-        .book-cover::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: url('/pattern-bg.png') center/cover;
-          opacity: 0.3;
-        }
-
-        .book-cover h3 {
           position: relative;
-          z-index: 1;
-          font-size: 1.75rem;
-          margin-bottom: 16px;
         }
 
-        .book-cover .author {
-          position: relative;
-          z-index: 1;
-          font-size: 1rem;
-          opacity: 0.9;
+        .book-cover img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
 
         .book-info h3 {
@@ -837,6 +847,73 @@ export default function Home() {
           box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
+        /* Get Started Form Dialog */
+        .get-started-dialog {
+          background: white !important;
+          border: 1px solid #e2e8f0;
+          border-radius: 20px;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .get-started-dialog label {
+          color: #0f172a;
+          font-weight: 600;
+          font-size: 0.9rem;
+        }
+        .get-started-dialog input,
+        .get-started-dialog select,
+        .get-started-dialog textarea {
+          border: 1px solid #cbd5e1;
+          border-radius: 10px;
+          padding: 10px 14px;
+          font-size: 0.95rem;
+          background: #f8fafc;
+          transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .get-started-dialog input:focus,
+        .get-started-dialog select:focus,
+        .get-started-dialog textarea:focus {
+          outline: none;
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+          background: white;
+        }
+        .get-started-dialog select {
+          cursor: pointer;
+          appearance: auto;
+          width: 100%;
+        }
+        .get-started-dialog textarea {
+          min-height: 80px;
+          resize: vertical;
+        }
+        .get-started-dialog [data-slot="dialog-close"] {
+          color: #64748b;
+          top: 1rem;
+          right: 1rem;
+        }
+        .get-started-dialog [data-slot="dialog-close"]:hover {
+          color: #0f172a;
+        }
+        .get-started-dialog .form-submit-btn {
+          background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%);
+          color: white;
+          font-weight: 600;
+          padding: 12px 24px;
+          border-radius: 10px;
+          border: none;
+          width: 100%;
+          cursor: pointer;
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .get-started-dialog .form-submit-btn:hover:not(:disabled) {
+          transform: translateY(-1px);
+          box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+        }
+        .get-started-dialog .form-submit-btn:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
         /* Footer */
         footer {
           background: #0f172a;
@@ -969,13 +1046,13 @@ export default function Home() {
       {/* Navigation */}
       <nav>
         <div className="container nav-content">
-          <div className="logo">KM Kalicharan</div>
+          <div className="logo">Kali</div>
           <ul className="nav-links">
             <li><a href="#about" onClick={(e) => scrollToSection(e, 'about')}>About</a></li>
             <li><a href="#book" onClick={(e) => scrollToSection(e, 'book')}>Book</a></li>
             <li><a href="#podcast" onClick={(e) => scrollToSection(e, 'podcast')}>Podcast</a></li>
             <li><a href="#courses" onClick={(e) => scrollToSection(e, 'courses')}>Courses</a></li>
-            <li><a href="#contact" onClick={(e) => scrollToSection(e, 'contact')} className="nav-cta">Get Started</a></li>
+            <li><a href="#contact" onClick={(e) => { e.preventDefault(); setShowGetStartedForm(true); }} className="nav-cta">Get Started</a></li>
           </ul>
         </div>
       </nav>
@@ -986,17 +1063,16 @@ export default function Home() {
           <div className="hero-text">
             <h1 className="animate-on-scroll">Master Vibe Coding with an Industry Veteran</h1>
             <p className="subtitle animate-on-scroll">
-              Learn AI-assisted coding from prompting to production with personalized 1:1 coaching. 
-              Transform your development skills with guidance from a 20+ year AI/ML expert who's built 
-              cutting-edge solutions for Fortune 500 companies.
+            Launch your innovative business ideas faster and more cost-effectively with personalized, 1:1 guidance from a 23+ year AI/ML expert.
+            Learn an end-to-end "vibe coding" approach to quickly build fully functional Minimum Viable Products (MVPs), turning your concepts into working prototypes in just a couple of days.            
             </p>
             <div className="hero-stats animate-on-scroll">
               <div className="stat-item">
-                <span className="stat-number">20+</span>
+                <span className="stat-number">23+</span>
                 <span className="stat-label">Years Experience</span>
               </div>
               <div className="stat-item">
-                <span className="stat-number">8K+</span>
+                <span className="stat-number">9K+</span>
                 <span className="stat-label">LinkedIn Followers</span>
               </div>
               <div className="stat-item">
@@ -1011,7 +1087,7 @@ export default function Home() {
           </div>
           <div className="hero-image animate-on-scroll">
             <div className="hero-image-wrapper">
-              <img src="/upload/profile-photo.jpeg" alt="KM Kalicharan" />
+              <img src="/upload/profile-photo.jpeg" alt="Kalicharan Mahasivabhattu" />
             </div>
           </div>
         </div>
@@ -1023,35 +1099,30 @@ export default function Home() {
           <div className="about-text">
             <h3 className="animate-on-scroll">Your Guide to AI-Powered Development</h3>
             <p className="animate-on-scroll">
-              I'm KM Kalicharan, an Associate Director of Data Science at Novartis with over 20 years of 
-              experience building innovative AI/ML solutions. I've led cross-functional teams at Fortune 500 
-              companies, developed cutting-edge medical imaging platforms, and won $50,000 in innovation funding 
-              for groundbreaking work.
+            Transform from a non-technical leader into a self-sufficient, AI-powered entrepreneur. I'm Kalicharan Mahasivabhattu, 
+            Director of Data Science at Pharma with over 23 years of experience building innovative AI/ML solutions for Fortune 500 companies. 
+            Now, I'm bringing that expertise directly to startup founders, CEOs, and senior managers.
             </p>
             <p className="animate-on-scroll">
-              My expertise spans conversational AI, generative AI, computer vision, and natural language processing. 
-              I've collaborated with IIT Mumbai to develop IP for lung nodule detection and built conversational 
-              AI systems using OpenAI's custom models.
+            My personalized, 1:1 Vibe Coding™ training is designed for rapid execution: you'll move from initial prompt to a fully functional web application prototype in just a few days. We cut through the confusion of generic training programs, ensuring you avoid getting stuck in tools with a dedicated, handholding approach until your product is live.
             </p>
             <p className="animate-on-scroll">
-              Now, I'm bringing this wealth of knowledge to you through personalized 1:1 Vibe Coding training. 
-              Learn how to leverage AI tools from initial prompt to finished product, with hands-on coaching 
-              tailored to your specific goals and skill level.
+            Master the art of creating high-impact MVPs using conversational AI, generative AI, computer vision, and natural language processing. By leveraging AI as your entire technical team, you gain the confidence to quickly iterate and monetize your ideas, giving you a massive competitive advantage.
             </p>
             <div className="skills-grid animate-on-scroll">
-              <div className="skill-badge">Python</div>
-              <div className="skill-badge">AI/ML</div>
-              <div className="skill-badge">NLP</div>
-              <div className="skill-badge">OpenAI</div>
-              <div className="skill-badge">TensorFlow</div>
-              <div className="skill-badge">PyTorch</div>
-              <div className="skill-badge">Azure AI</div>
-              <div className="skill-badge">AWS</div>
+              <div className="skill-badge">Prompt Engineering</div>
+              <div className="skill-badge">Replit</div>
+              <div className="skill-badge">Cursor</div>
+              <div className="skill-badge">Vercel</div>
+              <div className="skill-badge">Github</div>
+              <div className="skill-badge">Zhipu</div>
+              <div className="skill-badge">Postgress</div>
+              <div className="skill-badge">LLMs</div>
             </div>
           </div>
           <div className="about-image animate-on-scroll">
             <div className="about-image-wrapper">
-              <img src="/upload/profile-photo.jpeg" alt="KM Kalicharan" />
+              <img src="/upload/profile-photo.jpeg" alt="Kalicharan Mahasivabhattu" />
             </div>
           </div>
         </div>
@@ -1066,8 +1137,7 @@ export default function Home() {
           </div>
           <div className="book-card">
             <div className="book-cover">
-              <h3>Algorithm<br />Diaries</h3>
-              <p className="author">by KM Kalicharan</p>
+              <img src="/upload/algorithm-diaries-cover.png" alt="Algorithm Diaries by Kalicharan Mahasivabhattu" />
             </div>
             <div className="book-info">
               <span className="tag">Bestseller</span>
@@ -1083,7 +1153,7 @@ export default function Home() {
                 <li>Practical insights from industry experience</li>
                 <li>Bridge between theory and practice</li>
               </ul>
-              <a href="#contact" onClick={(e) => scrollToSection(e, 'contact')} className="btn btn-primary">Get Your Copy</a>
+              <a href="https://www.amazon.in/Algorithm-Diaries-Lighthearted-understanding-algorithms/dp/B0C24CJMKH" target="_blank" rel="noopener noreferrer" className="btn btn-primary">Get Your Copy</a>
             </div>
           </div>
         </div>
@@ -1156,13 +1226,13 @@ export default function Home() {
             </div>
             <div className="achievement-card">
               <div className="achievement-icon">👥</div>
-              <div className="achievement-number">8K+</div>
+              <div className="achievement-number">9K+</div>
               <h4>LinkedIn Followers</h4>
               <p>Building a community of 8,000+ professionals passionate about AI and data science</p>
             </div>
             <div className="achievement-card">
               <div className="achievement-icon">🎯</div>
-              <div className="achievement-number">20+</div>
+              <div className="achievement-number">23+</div>
               <h4>Years Experience</h4>
               <p>Two decades of expertise across healthcare, manufacturing, and technology sectors</p>
             </div>
@@ -1254,14 +1324,116 @@ export default function Home() {
             Join hundreds of developers who have accelerated their careers with Vibe Coding. 
             Get personalized guidance from an industry expert who's been building AI solutions for over 20 years.
           </p>
-          <a href="mailto:mkalicharan@gmail.com" className="btn btn-white">Get Started Today</a>
+          <button type="button" onClick={() => setShowGetStartedForm(true)} className="btn btn-white">Get Started Today</button>
         </div>
       </section>
+
+      {/* Get Started Form Dialog */}
+      <Dialog open={showGetStartedForm} onOpenChange={setShowGetStartedForm}>
+        <DialogContent className="get-started-dialog sm:max-w-lg bg-white border-0 shadow-2xl rounded-2xl p-8">
+          <DialogHeader className="pb-4 border-b border-slate-200">
+            <DialogTitle className="text-xl font-bold text-slate-900 font-[family-name:var(--font-geist-sans)]">
+              Get Started Today
+            </DialogTitle>
+            <DialogDescription className="text-slate-600 mt-1">
+              Share your details and we&apos;ll get back to you with personalized guidance for your Vibe Coding journey.
+            </DialogDescription>
+          </DialogHeader>
+          {formStatus === 'success' ? (
+            <div className="py-8 text-center">
+              <div className="text-4xl mb-3">✓</div>
+              <p className="text-green-600 font-semibold text-lg">Thank you!</p>
+              <p className="text-slate-600 mt-1">We&apos;ve received your information and will reach out soon.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleGetStartedSubmit} className="space-y-4 pt-6">
+              <div>
+                <Label htmlFor="lead-name">Name *</Label>
+                <Input
+                  id="lead-name"
+                  required
+                  placeholder="Your name"
+                  value={formState.name}
+                  onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))}
+                  disabled={formStatus === 'submitting'}
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label htmlFor="lead-email">Email *</Label>
+                <Input
+                  id="lead-email"
+                  type="email"
+                  required
+                  placeholder="you@example.com"
+                  value={formState.email}
+                  onChange={(e) => setFormState((s) => ({ ...s, email: e.target.value }))}
+                  disabled={formStatus === 'submitting'}
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label htmlFor="lead-phone">Phone</Label>
+                <Input
+                  id="lead-phone"
+                  type="tel"
+                  placeholder="+1 (555) 000-0000"
+                  value={formState.phone}
+                  onChange={(e) => setFormState((s) => ({ ...s, phone: e.target.value }))}
+                  disabled={formStatus === 'submitting'}
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label htmlFor="lead-interest">I&apos;m interested in</Label>
+                <select
+                  id="lead-interest"
+                  value={formState.interest}
+                  onChange={(e) => setFormState((s) => ({ ...s, interest: e.target.value }))}
+                  disabled={formStatus === 'submitting'}
+                  className="mt-1 w-full"
+                >
+                  <option value="">Select an option</option>
+                  <option value="Vibe Coding 1:1">Vibe Coding 1:1 Coaching</option>
+                  <option value="Beginner Vibe Coding">Beginner Vibe Coding</option>
+                  <option value="Advanced Vibe Coding">Advanced Vibe Coding</option>
+                  <option value="Enterprise Training">Enterprise Training</option>
+                  <option value="Algorithm Diaries Book">Algorithm Diaries Book</option>
+                  <option value="Podcast">Podcast</option>
+                  <option value="General inquiry">General inquiry</option>
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="lead-message">Message</Label>
+                <Textarea
+                  id="lead-message"
+                  placeholder="Tell us about your goals or any questions..."
+                  value={formState.message}
+                  onChange={(e) => setFormState((s) => ({ ...s, message: e.target.value }))}
+                  disabled={formStatus === 'submitting'}
+                  rows={3}
+                  className="mt-1"
+                />
+              </div>
+              {formStatus === 'error' && (
+                <p className="text-sm text-red-600">Something went wrong. Please try again.</p>
+              )}
+              <button
+                type="submit"
+                disabled={formStatus === 'submitting'}
+                className="form-submit-btn"
+              >
+                {formStatus === 'submitting' ? 'Submitting...' : 'Submit'}
+              </button>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Footer */}
       <footer>
         <div className="container footer-content">
-          <div className="logo">KM Kalicharan</div>
+          <div className="logo">Kali</div>
           <div className="footer-social">
             <a href="https://www.linkedin.com/in/kalicharan-mahasivabhattu-5a6a6a12/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             <a href="#" target="_blank" rel="noopener noreferrer">Twitter</a>
@@ -1274,7 +1446,7 @@ export default function Home() {
             <a href="#courses" onClick={(e) => scrollToSection(e, 'courses')}>Courses</a>
             <a href="#contact" onClick={(e) => scrollToSection(e, 'contact')}>Contact</a>
           </div>
-          <p>© 2025 KM Kalicharan. All rights reserved. | mkalicharan.com</p>
+          <p>© 2025 Kalicharan Mahasivabhattu. All rights reserved. | mkalicharan.com</p>
         </div>
       </footer>
     </>

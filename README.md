@@ -1,6 +1,6 @@
-# KM Kalicharan - Vibe Coding Trainer Website
+# Kalicharan Mahasivabhattu - Vibe Coding Trainer Website
 
-A professional, responsive website showcasing KM Kalicharan's profile as an AI/ML expert and Vibe Coding trainer. Built with Next.js 16, React, and TypeScript.
+A professional, responsive website showcasing Kalicharan Mahasivabhattu's profile as an AI/ML expert and Vibe Coding trainer. Built with Next.js 16, React, and TypeScript.
 
 ## 🌐 Live Preview
 
@@ -48,7 +48,7 @@ my-project/
    cd /home/z/my-project
    git init
    git add .
-   git commit -m "Initial commit - KM Kalicharan website"
+   git commit -m "Initial commit - Kalicharan Mahasivabhattu website"
    git remote add origin https://github.com/YOUR_USERNAME/mkalicharan-website.git
    git push -u origin main
    ```
@@ -291,7 +291,7 @@ If using Vercel or Netlify with GitHub integration, your site will automatically
 
 ## 📄 License
 
-© 2025 KM Kalicharan. All rights reserved.
+© 2025 Kalicharan Mahasivabhattu. All rights reserved.
 
 ---
 
